@@ -1,0 +1,24 @@
+<%- include('layouts/viewHeader') %>
+    <div class="main-container">
+        <%- include('layouts/sidebar') %>
+         
+        <%- include('layouts/viewMainSection') %>
+        
+
+    </div>
+
+      <%- include('layouts/deletePopup') %>
+
+
+      <%- include('layouts/viewEmpForm') %>
+
+    <div class="succes-alert" id="succes-alert">
+        <span id="succes-icon"></span>
+        <span id="succes-text"></span>
+    </div>
+
+    <div class="overlay" id="overlayId" onclick="formHide()"></div>
+    <div class="overlayDiv" id="overlayDivId" ></div>
+    
+
+<%- include('layouts/viewFooter') %> 

@@ -1,0 +1,84 @@
+<div  class="main-data-section">
+    <div class="main-top-head">
+        <div class="top-texts">
+            <span>Dashboard / Employees</span>
+            <h3>Employees</h3>
+        </div>
+        <form class="search-form">
+            <div class="form-group has-search">
+                <span class="fa fa-search form-control-feedback"></span>
+                <input type="text" class="form-control search-id-form" id="searchItem" placeholder="Search First /last Name/Email/Phone" onkeyup="searchEmp()">
+            </div>
+            <i class="fa-regular fa-bell bell-icon"></i>
+            <img src="./images/Avatar Style 6.png" alt="nothing">
+        </form>
+    </div>
+    <div class="main-employe-page">
+        <div class="page-employ-details">
+            <div class="pagination10" >
+                <span>Employees List</span>
+                <select class="form-select  numbers" id="employeeList">
+                    <option value="3">3</option>
+                    <option value="5" selected>5</option>
+                    <option value="7">7</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+                <p class=" m-0 ">of</p>
+                <span><p id="totalLength" class="m-0">10</p></span>
+            </div>
+            <button class="employe-btn" id="add-emply-id" onclick="formIdPopup()">Add Employee</button>
+        </div>
+        <div class="individual-details">
+            <table class="table">
+              <thead>
+                <tr class="head-element">
+                    <th scope="col">SI.No <i class="fa-solid fa-angle-down"></i></th>
+                    <th scope="col">Name <i class="fa-solid fa-angle-down"></i></th>
+                    <th scope="col">Email <i class="fa-solid fa-angle-down"></i></th>
+                    <th scope="col">Phone <i class="fa-solid fa-angle-down"></i></th>
+                    <th scope="col">Gender <i class="fa-solid fa-angle-down"></i></th>
+                    <th scope="col">DOB <i class="fa-solid fa-angle-down"></i></th>
+                    <th scope="col">Country <i class="fa-solid fa-angle-down"></i></th>
+                    <th scope="col"> </th>
+                </tr>
+              </thead>
+                <tbody>
+                    <tr class="table-details ">
+                        <td scope="row" >#01</td>
+                        <td><img alt="">Mr.Michael Johnson</td>
+                        <td>michaeljohnson@example.com</td>
+                        <td>5551234567</td>
+                        <td>Male</td>
+                        <td>10 December 1985</td>
+                        <td>USA</td>
+                        <td><button class="three-dot-btn">...</button></td>
+                    </tr>
+                    <!-- <div class="small-popup">
+                        <a href="#"><i class="fa-regular fa-eye"></i>View Details</a>
+                        <a href="#"><i class="fa-solid fa-pen"></i>Edit</a>
+                        <a href="#"><i class="fa-regular fa-trash-can"></i>Delete</a>
+                    </div> -->
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+    <div class="page-btns">
+        <button class="sml-btn" onclick="firstPage()"><i class="fa-solid fa-angles-left"></i></button>
+        <button class="sml-btn" onclick="previousePage()" ><i class="fa-solid fa-angle-left"></i></button>
+        <div id="paginationId" class="page-btns">
+
+        </div>
+        <button class="sml-btn"onclick="nextPage()"><i class="fa-solid fa-angle-right"></i></button>
+        <button class="sml-btn" onclick="lastPage()"><i class="fa-solid fa-angles-right"></i></button>
+    </div>
+    <div class="footer-section">
+        <span>© 2023  All Rights Reserved. Stackup</span>
+        <div class="terms-and-texts">
+            <p class="m-0"><a href="#">Terms of Use</a></p>
+            <p class="m-0"><a href="#">Privacy Policy</a></p>
+        </div>
+
+    </div>
+</div> 

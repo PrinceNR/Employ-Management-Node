@@ -1,0 +1,72 @@
+<div class="main-data-section">
+    <div class="main-top-head">
+        <div class="top-texts">
+            <span>Dashboard / Employees</span>
+            <h3>Employees</h3>
+        </div>
+    </div>
+    <div class="user-popup " id="userDetails">
+        <div>
+            <img src="./images/Background Image.png" alt="">
+        </div>
+        <div class="d-flex flex-column align-items-center gap-4  image-and-details">
+            <div class="user-images ">
+                <img id="employeeImage" src="/" alt="">
+            </div>
+            <div class="user-name-mail d-flex flex-column align-items-center">
+                <span id="employeeFullName">Mr. Michael Johnson</span>
+                <p id="employeeEmail">michaeljohnson@example.com</p>
+            </div>
+        </div>
+        <div class="row justify-content-between first-row">
+            <div class="col-4 data-coloumns d-flex flex-column gap-2">
+                <label>Gender</label>
+                <span id="employeeGender" ></span>
+            </div>
+            <div class="col-4 data-coloumns d-flex flex-column gap-2">
+                <label>Age</label>
+                <span id="employeeAge"></span>
+            </div>
+            <div class="col-4 data-coloumns d-flex flex-column gap-2">
+                <label>Date of Birth</label>
+                <span id="employeeDob"></span>
+            </div>
+        </div>
+        <div class="row justify-content-between datas2 mt-4">
+            <div class="col-6 data-coloumns d-flex flex-column gap-2">
+                <label>Mobile Number</label>
+                <span id="employeePhone"></span>
+            </div>
+            <div class="col-6 data-coloumns d-flex flex-column gap-2">
+                <label>Qualifications</label>
+                <span id="employeeQualification"></span>
+            </div>
+        </div>
+        <div class="row justify-content-between datas2 mt-4">
+            <div class="col-6 data-coloumns d-flex flex-column gap-2">
+                <label>Address</label>
+                <span id="employeeAddress">
+                    </span>
+            </div>
+            <div class="col-6 data-coloumns d-flex flex-column gap-2">
+                <label>Username</label>
+                <span id="employeeUserName"></span>
+            </div>
+        </div>
+        <div class=" d-flex justify-content-end  gap-2  user-popup-btns my-4">
+            <button class="btn btn-danger sing-btn fld-btn" id="deleteEmployee" onclick="deletePopup2()" type="button">Delete </button>
+            <button class="btn sing-btn-first sing-btn me-md-2" id="editDetailsBtn" onclick="editPopup2()" type="button">Edit Details</button>
+
+        </div>
+
+
+    </div>
+    <div class="footer-section">
+        <span>© 2023 All Rights Reserved. Stackup</span>
+        <div class="terms-and-texts">
+            <p class="m-0"><a href="#">Terms of Use</a></p>
+            <p class="m-0"><a href="#">Privacy Policy</a></p>
+        </div>
+
+    </div>
+</div>

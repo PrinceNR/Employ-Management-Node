@@ -1,0 +1,159 @@
+<div class="employe-form-popup" id="empFormId">
+    <div class="emp-form-head">
+        <h4 id="popupHeading">Add Employee</h4>
+        <button class="sml-btn" onclick="formHide()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="inputImg">
+        <input class="form-control" type="file" id="formFile">
+        <label for="formFile" class="form-label upload d-flex flex-column align-items-center p-4 mb-3 rounded-4 bg-light">
+            <i class="fa-solid fa-download  pb-2"></i>
+            <h5 class=" inputtext">Upload Image</h5>
+            <h6 class=" inputtext">PNG, JPG files are allowed</h6>
+        </label>
+    </div>
+    <div class="edited-popup  gap-3 align-items-center" id="editedPopup">
+        <label class="form-label upload d-flex flex-column align-items-center mb-3 p-3 " for="editImage">
+            <img  src="/" alt="" id="imgSrc">
+        </label>
+        <label class="btn sing-btn" for="editImage">Change</label>
+        <input type="file" id="editImage">
+
+    </div>
+    <form >
+        <div class=" threediv d-flex  justify-content-between ">
+            <div class=" col-md-4  sub-colms col-sm-12 mb-4 ">
+                <label for="salutation" class="form-label">Salutation</label>
+                <!-- <input type="" class="form-control" placeholder="Enter email" name="email"> -->
+                <select class="form-select" id="salutation" onchange ="valSalutations()">
+                    <option value="" selected>Select..</option>
+                    <option value="Mrs">Mrs</option>
+                    <option value="Mr">Mr</option>
+                    <option value="Dr">Dr</option>
+                </select>
+                <span class="valid" id="valSalutation"></span>
+            </div>
+            <div class="row justify-content-between col-md-8 col-sm-12 ">
+                <div class="col-md-6 col-sm-6 mb-4  ">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="firstName" placeholder="First Name " onkeyup="validFName()">
+                    <span class="valid" id="valFName"></span>
+                </div>
+                <div class="col-md-6 col-sm-6 mb-4 ">
+                    <label for="secondName" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="secondName" placeholder="Second Name" onkeyup="validLName()" >
+                    <span class="valid" id="valLName"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-6 mb-4 ">
+                <label for="emailAddress" class="form-label">User Name</label>
+                <input type="text" class="form-control" id="userName" placeholder="Username" onkeyup="validUName()">
+                <span class="valid" id="valUName"></span>
+            </div>
+            <div class="col-md-6 col-sm-6 mb-4 ">
+                <label for="password" class="form-label">Enter Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Pasword" onkeyup="validPassword()">
+                <span class="valid" id="valPassword">  </span>
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col-md-6 col-sm-6 mb-4 ">
+                <label for="emailAddress" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="emailAddress" placeholder="Princenr@gmail.com " onkeyup="validEmail()">
+                <span class="valid" id="valEmail"></span>
+            </div>
+            <div class="col-md-6 col-sm-6 mb-4 ">
+                <label for="mobNum" class="form-label">Enter Mobile Number</label>
+                <input type="number" class="form-control" id="mobNum" placeholder="0000000000" onkeyup="validNum()">
+                <span class="valid" id="valNum"></span>
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col-md-6 col-sm-6 mb-4 ">
+                <label for="dOB" class="form-label">Date of Birth</label>
+                <input type="date" class="form-control" id="dOB" placeholder="Select date of Birth" onkeyup="validDOB()">
+                <span class="valid" id="valBirth"></span>
+            </div>
+            <div class="col-md-6 col-sm-6 mb-4 ">
+                <label  class="form-label">Gender</label>
+                <div class="d-flex gap-5 mt-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="Male">
+                        <label class="form-check-label" for="flexRadioDefault1">
+                          Male
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="Female">
+                        <label class="form-check-label" for="flexRadioDefault2">
+                          Female
+                        </label>
+                    </div>
+                </div>
+                <span class="valid" id="valGender"></span>
+
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-lg-12">
+                <label for="qualification" class="form-label qualification">Qualifications</label>
+                <input type="text" id="qualification" class="form-control" placeholder="Enter Qualifications" >
+                <span class="valid" id="valQualification"></span>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-lg-12">
+                <label for="address" class="form-label ">Address</label>
+                <input type="text" class="form-control" id="address" placeholder="Enter Address" >
+                <span class="valid" id="valAddress"></span>
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col-md-6 col-sm-6 mb-4 ">
+                <label for="countrySelector" class="form-label">Country</label>
+                <!-- <input type="text" class="form-control" placeholder="Select Country " name="email"> -->
+                <select class="form-select" id="countrySelector">
+                    <option value="" selected>Select..</option>
+                    <option value="INDIA">INDIA</option>
+                    <option value="USA">USA</option>
+                    <option value="GERMANY">GERMANY </option> 
+                    <option value="CHINA">CHINA</option>
+                    <option value="AUSTRALIA">AUSTRALIA</option>
+                </select>
+                <span class="valid" id="valCountry"></span>
+            </div> 
+            <div class="col-md-6 col-sm-6 mb-4 ">
+                <label for="state" class="form-label">State</label>
+                <!-- <input type="text" class="form-control" placeholder="Select State " name="email"> -->
+                <select class="form-select " id="state">
+                    <option value="" selected>Select..</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Tamil nadu">Tamil nadu</option>
+                    <option value="West bengal">West bengal</option>
+                </select>
+                <span class="valid" id="valState"> </span>
+            </div>
+
+        </div>
+        <div class="row ">
+            <div class="col-md-6 col-sm-6 mb-4 ">
+                <label for="city" class="form-label">City</label>
+                <input type="text" class="form-control" id="city" placeholder="Enter city " name="email">
+                <span class="valid" id="valCity"></span>
+            </div>
+            <div class="col-md-6 col-sm-6 mb-4 ">
+                <label for="pinZip" class="form-label">Pin/zip</label>
+                <input type="text" class="form-control" id="pinZip" placeholder="Enter zip/pin " name="email">
+            </div>
+
+        </div>
+    </form>
+    <div class=" d-flex justify-content-end  gap-2 mt-5 ">
+        <button class="btn btn-light sing-btn me-md-2" onclick="formHide()" type="button">Cancel</button>
+        <button class="btn btn-primary sing-btn fld-btn" id="addEmployBtn" onclick="addemploye()" type="button">Add Employe</button>
+        <button class="btn btn-primary sing-btn fld-btn" id="addEmployBtns" type="button">Save changes</button>
+    </div>
+
+
+</div>
