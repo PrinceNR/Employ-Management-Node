@@ -1,3 +1,4 @@
+
 let url = new URLSearchParams(document.location.search);
 let employeeID = url.get("id");
 
@@ -62,6 +63,7 @@ const City = document.getElementById("city");
 const userDetails = document.getElementById("userDetails");
 const imgSrc = document.getElementById("imgSrc");
 const editImage = document.getElementById("editImage"); 
+const pinZip = document.getElementById("pinZip")
 
 let empFormId = document.getElementById("empFormId");
 let overlayId = document.getElementById("overlayId");
@@ -74,6 +76,15 @@ let thisEmployeeId;
 
 fetch("http://localhost:5010/api/employees/"+ employeeID )
    .then((employeedata) => {
+    if (!employeedata) {
+        const data = employeedata.json
+        // return render("index")
+        console.log(data)
+        employeeFullName.textContent = data.message;
+        throw new Error("employee not found")
+
+        
+    }
     return employeedata.json();
 
    })
@@ -81,7 +92,7 @@ fetch("http://localhost:5010/api/employees/"+ employeeID )
         const Name = ( employeedatas.salutation + " " + employeedatas.firstName + " " + employeedatas.lastName )
 
 
-        employeeImage.src = "http://localhost:5010/api/employees/"+ employeeID +"/avatar"
+        employeeImage.src = `/uploads/${employeedatas.avatar}`
         employeeFullName.textContent = Name;
         employeeEmail.textContent = employeedatas.email;
         employeeGender.textContent = employeedatas.gender;
@@ -161,7 +172,7 @@ function deletePopup2() {
            formHide();
            empDelete();
            setTimeout(() => {
-            window.location.href = "index.ejs";
+            return render("index")
            }, 2000); 
         }
         else {
@@ -219,7 +230,8 @@ function editPopup2() {
          CountrySelector.value=thisEmployeeId.country
          State.value=thisEmployeeId.state
          City.value=thisEmployeeId.city  
-         imgSrc.src = `http://localhost:5010/api/employees/${thisEmployeeId.id}/avatar`      
+         pinZip.value = thisEmployeeId.pin
+         imgSrc.src = `/uploads/${thisEmployeeId.avatar}`      
         
          thisEmployeeId.gender==="Male"?RadioBtn.checked=true :RadioBtn2.checked=true
      })
@@ -511,7 +523,7 @@ function validState(){
 }
 function validCity(){
  if(!City.value){
-     valCity.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>Enter address`;
+     valCity.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>Enter address`; 
      City.classList.add('input-border')
      return false;
  }
@@ -546,7 +558,7 @@ function formvalidation(){
     //  && (!validDOB()) && (!validGender()) && (!validQualification()) && (!validAddress())&& (!validCountry()) && (!validState()) && (!validCity()))){
     //     return false
     // }
-    if (!valSalutations()) { isValid = false   }
+    if (!valSalutations()) { isValid = false  }
     if (!validFName()) { isValid = false   }
     if (!validNum()) { isValid = false   }
     if (!validLName()) { isValid = false   }

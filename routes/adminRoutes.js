@@ -1,5 +1,5 @@
 const express = require("express");
-const { signUpAdmin,loginAdmin,allAdmin } = require("../controllers/adminController");
+const { signUpAdmin,verifyOtp,loginAdmin,allAdmin } = require("../controllers/adminController");
 const viewController = require("../controllers/viewController");
 const validateToken = require("../middleware/validateTokenHandler");
 
@@ -13,9 +13,17 @@ router.get("/login",viewController.renderloginPage);
 
 router.get("/otp", viewController.renderOtp);
 
+router.post("/otp",verifyOtp)
+
 router.post("/signup",signUpAdmin)
 
-router.post("/login", loginAdmin)
+router.post("/login", loginAdmin) 
+
+// router.get("/logout", (req, res) => {
+//     req.cookies.jwt = null
+//     res.redirect("/login")
+   
+//    }) 
 
 // router.get("/current",validateToken, currentAdmin);
 

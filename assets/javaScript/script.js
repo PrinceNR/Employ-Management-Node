@@ -1,55 +1,61 @@
-// const { start } = require("repl");
 
-// const { stringify } = require("querystring");
-
-var allEmployee  = [];
+var Employees  = [];
 let start 
 let endNum 
 var numOfPage
 var endvalue 
 var A
 var Numbe 
+let totalEmploye
 
-// async function fetchData()  {
-
-//     try{
-
-//         let prince = await  fetch( "http://localhost:3000/employees") ;
-
-//         var data = await prince.json();
-//         console.log(data)
-//         allEmployee = data ;
-//         //  displayData(data);
-       
-//     }catch(error) {
-//         console.log(error);
-//     }
-
-// }
-// dummy-employee-api\public\default-avatar.png
-// default-avatar.jpg
+async function fetchData(currentPage) {
+    let query = searchEmployee.value;
+    const url = `http://localhost:5010/employees?page=${currentPage}&limit=${employeeList.value}&search=${query}`
+    
+    try {
+        const response = await fetch(url)
+        if (!response.ok) {
+            // const variable = await response.json()
+            console.log("variable",response);
+            if (response.redirect) {
+                setTimeout(() => {
+                    window.location.href = variable.redirect;
+                }, 1000);
+            }
+           throw new Error("failed to fetch data")     
+        }
+        const data = await response.json()
+        start = currentPage*employeeList.value
+        Employees = data.data
+        displayData(Employees ,start)
+        numOfPage = data.totalPages
+        totalEmploye = data.totalCount
+        makebtn(data.totalPages)
+        paginationFun(currentPage)
+    } catch (error) {
+        console.log(error);
+    }
+    
+}
 
 var employeeList = document.getElementById("employeeList");
 
 employeeList.addEventListener('change', function(){
-    endvalue = parseInt(employeeList.value);
-    if (searchEmployee.value !=="" ){
-         makebtn(endvalue, searchedArray);
-    }
-    else{
-        makebtn(endvalue, allEmployee)
-
-    }
+if(totalEmploye<employeeList.value){
+    fetchData(0)
+}
+    fetchData(currentPage)
+    
 
 })
 
 function displayData(data ,start){
-    let tmpdata ="";
+    let tmpdata =""; 
     let tbody = document.getElementsByTagName("tbody")[0] ;
      for(let i = 0 ; i < data.length ; i++) {
         tmpdata+=`<tr class="table-details" id="tableDetails">`
         tmpdata+= `<td scope="row">#${serialNo(start+1)}</td>`
-        tmpdata+= `<td>
+        tmpdata+= `<td><img src= "/uploads/${data[i].avatar}"/>
         
          ${data[i].salutation} ${" "} ${data[i].firstName}${" "} ${data[i].lastName}</td>`
         tmpdata+= `<td>${data[i].email}</td>`
@@ -62,69 +68,17 @@ function displayData(data ,start){
              <a href="view/?id=${data[i]._id}" target="_blank"  ><i class="fa-regular fa-eye"></i>View Details</a>
              <a href="#" onclick = editPopup("${data[i]._id}") ><i class="fa-solid fa-pen"></i>Edit</a>
              <a href="#" onclick = deletePopup("${data[i]._id}") ><i class="fa-regular fa-trash-can"></i>Delete</a>
-        </div>
+        </div> 
         </td>`
         tmpdata+= `</tr>`
         start++;
      }
     tbody.innerHTML = tmpdata ;
 }
-
-// fetchData() ;
-getData();
-function getData() {
-    
-    fetch("http://localhost:5010/api/employees")
-    .then(
-        (res)=>res.json()
-    ).then((response)=> {
-        allEmployee = response;
-        // displaydata(response);
-        endvalue = parseInt(employeeList.value);
-        makebtn(endvalue, allEmployee);
-        // console.log(tmpData);
-    })
-}
-
-//    function displaydata(response){
-
-//         var tmpData = "";
-//         var k=1;
-        
-//         let tbody = document.getElementsByTagName("tbody")[0] ;
-    
-//         response.forEach((user)  =>{
-            
-//             tmpData+=`<tr class="table-details">`
-//             tmpData+= `<td scope="row">#${serialNo(k)}</td>`
-//             tmpData+= `<td><img src= "http://localhost:3000/employees/${thisEmployeeId.id}/avatar"> ${user.firstName}</td>`
-//             tmpData+= `<td>${user.email}</td>`
-//             tmpData+= `<td>${user.phone}</td>`
-//             tmpData+= `<td>${user.gender}</td>`
-//             tmpData+= `<td>${user.dob}</td>`
-//             tmpData+= `<td>${user.country}</td>`
-//             tmpData+= `<td><button class="three-dot-btn"  onclick="btnPop(this.nextElementSibling)">...</button>
-//             <div class="small-popup" id="smlPopupId">
-//                  <a href="./index2.html?id=${user.id}" target="_blank" ><i class="fa-regular fa-eye"></i>View Details</a>
-//                  <a href="#" onclick = editPopup("${user.id}")><i class="fa-solid fa-pen"></i>Edit</a>
-//                  <a href="#" onclick = deletePopup("${user.id}")><i class="fa-regular fa-trash-can"></i>Delete</a>
-//             </div>
-//             </td>`
-//             tmpData+= `</tr> `
-//             k++;
-        
-            
-//         })
-        
-//         tbody.innerHTML = tmpData ;
-//         console.log(response);
-// }
-
 function btnPop(btn) {
     btn.classList.toggle("active");
     overlaydives.style.display= "block";
     overlaydives.addEventListener("click", function(){
-        console.log("hiii")
         btn.classList.remove("active");
         overlaydives.style.display = 'none';
     })
@@ -152,8 +106,7 @@ function serialNo(num){
     }
     else 
     return num;
- }
-
+ } 
 function formIdPopup(){
     inputImg.style.display = "block";    
     empFormId.style.display = "block";
@@ -184,7 +137,7 @@ const RadioBtn = document.getElementById("flexRadioDefault1");
 const RadioBtn2 = document.getElementById("flexRadioDefault2");
 const Qualification = document.getElementById("qualification");
 const Address = document.getElementById("address");
-const CountrySelector = document.getElementById("countrySelector");
+const CountrySelector = document.getElementById("country");
 const State = document.getElementById("state");
 const City = document.getElementById("city");
 const userDetails = document.getElementById("userDetails");
@@ -194,27 +147,20 @@ const pin = document.getElementById("pinZip")
 
 var searchEmployee = document.getElementById("searchItem");
 
-const valSalutation = document.getElementById("valSalutation"),
-    valFName = document.getElementById("valFName"),
-    valLName = document.getElementById("valLName"),
-    valUName = document.getElementById("valUName"),
-    valPassword = document.getElementById("valPassword"),
+
+const  valPassword = document.getElementById("valPassword"),
     valEmail = document.getElementById("valEmail"),
     valNum = document.getElementById("valNum"),
     valBirth = document.getElementById("valBirth"),
-    valGender = document.getElementById("valGender"),
-    valQualification = document.getElementById("valQualification"),
-    valAddress = document.getElementById("valAddress"),
-    valCountry = document.getElementById("valCountry"),
-    valState = document.getElementById("valState"),
-    valCity = document.getElementById("valCity")
+    valGender = document.getElementById("valGender")
 
-var succesAlert = document.getElementById("succes-alert"),
+var succesAlert = document.getElementById("succes-alert"), 
     succesIcon = document.getElementById("succes-icon"),
     succesText = document.getElementById("succes-text")
 
 const formControl = document.querySelectorAll(".form-control"),
-    formSelect = document.querySelectorAll(".form-select")
+    formSelect = document.querySelectorAll(".form-select"),
+    formSpan = document.querySelectorAll(".valid")
 
 
 
@@ -222,6 +168,30 @@ const formControl = document.querySelectorAll(".form-control"),
 var profileImg ="";
 
 
+
+document.getElementById("logoutBtn").addEventListener("click" ,async  () => {
+    try {
+        const response = await fetch('/api/employees/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include' // Include cookies in the request
+        });
+
+        if (response.ok) {
+            // Redirect to the login page or another page
+            window.location.href = '/admin/login';
+        } else {
+            const errorData = await response.json();
+            console.error('Logout failed:', errorData);
+            alert('Logout failed. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+    }
+})
 
 
 function  addingUser() {
@@ -245,11 +215,9 @@ function  addingUser() {
         country : CountrySelector.value,
         state : State.value,
         city :City.value,
-        pin: pin.value,
-        image :profileImg
+        pin: pin.value
     }
 
-    console.log(newUser);
 
     return newUser
  
@@ -262,14 +230,11 @@ function gender(){
 }
 
 function dOfB(date) {
-   console.log(date);
    date = date.split("-").reverse().join("-");
-   console.log(date);
    return date;
 }
 let newData = [];
 function addemploye() {
-   console.log(formvalidation())
  if (formvalidation()==true){
     
     try{
@@ -284,45 +249,47 @@ function addemploye() {
     .then((data)=>{
         return data.json();
     })
-    // .then((data)=> {
-    //      uploadImg(data.id)
-    //      newData.id = data.id
-    // }
-// )
+    .then((data)=> {
+         uploadImg(data._id)
+         newData.id = data.id
+    }
+)
     }catch(error) {
     console.log(error)
     }
-    allEmployee.push(newData)
+    Employees.unshift(newData)
     empAdded();
     formHide();
     setTimeout(() => {
         // window.location.reload();
-        makebtn(employeeList.value, allEmployee)
-        
-        lastPage();
+        // makebtn(employeeList.value, allEmployee)
+
+        firstPage()
+        // lastPage();
     }, 2000);  
     }
 }
 function formvalidation(){
     let isValid = true
-    // if(!(!valSalutations() && !validFName() && (!validNum()) && (!validLName()) && (!validUName()) && (!validPassword()) && (!validEmail())
-    //  && (!validDOB()) && (!validGender()) && (!validQualification()) && (!validAddress())&& (!validCountry()) && (!validState()) && (!validCity()))){
-    //     return false
-    // }
-    if (!valSalutations()) { isValid = false }
-    if (!validFName()) { isValid = false   }
-    if (!validNum()) { isValid = false   }
-    if (!validLName()) { isValid = false   }
-    if (!validUName()) { isValid = false   }
-    if (!validPassword()) { isValid = false   }
-    if (!validEmail()) { isValid = false   }
-    if (!validDOB()) { isValid = false   }
-    if (!validGender()) { isValid = false   }
-    if (!validQualification()) { isValid = false   }
-    if (!validState()) { isValid = false   }
-    if (!validCountry()) { isValid = false   }
-    if (!validCity()) { isValid = false   }
-    if (!validAddress()) { isValid = false   }
+
+    if (!validation("salutation"))  isValid = false 
+    if (!validation("firstName"))  isValid = false      
+    if (!validation("secondName"))  isValid = false   
+    if (!validation("userName"))  isValid = false   
+
+    if (!validNum())       isValid = false   
+    if (!validPassword())  isValid = false   
+    if (!validEmail())     isValid = false   
+    if (!validDOB())       isValid = false   
+    if (!validGender())    isValid = false   
+
+    if (!validation("qualification"))  isValid = false   
+    if (!validation("address"))  isValid = false   
+    if (!validation("country"))  isValid = false   
+    if (!validation("state"))  isValid = false   
+    if (!validation("city"))  isValid = false   
+    if (!validation("pinZip"))  isValid = false   
+
 
 
     return isValid;
@@ -359,7 +326,7 @@ function editPopup(editId) {
             State.value=thisEmployeeId.state
             City.value=thisEmployeeId.city  
             pin.value = thisEmployeeId.pin
-            // imgSrc.src = `http://localhost:5010/employees/${thisEmployeeId.id}/avatar`
+            imgSrc.src = `/uploads/${thisEmployeeId.avatar}`
           
             thisEmployeeId.gender==="Male"?document.getElementById("flexRadioDefault1").checked=true :document.getElementById("flexRadioDefault2").checked=true
         })
@@ -380,16 +347,13 @@ function editPopup(editId) {
         
         })
 
-        allEmployee[findIndexById(allEmployee, thisEmployeeId)] = addingUser();
-        paginationFun(0, allEmployee)
+        Employees[findIndexById(Employees, thisEmployeeId)] = addingUser();
+        // paginationFun(currentPage)
+        // displayData(Employees, start)
+        fetchData(currentPage)
         formHide();
         empEdit() 
-        // setTimeout(() => {
-            // window.location.reload();
-            
-            // lastPage();
-        // }, 2000);  
-        // location.reload() 
+
     }
     }
 }
@@ -402,34 +366,20 @@ function findIndexById(array, id) {
 }
 function refresh(){
 
-
     Salutation.value=""
-    valSalutation.textContent = ""
     FirstName.value=""
-    valFName.textContent=""
     SecondName.value=""
-    valLName.textContent=""
     UserName.value=""
-    valUName.textContent=""
+
     Password.value=""
-    valPassword.textContent="" 
     Email.value=""
-    valEmail.textContent=""
     MobNum.value=""
-    valNum.textContent=""
     DOB.value=""
-    valBirth.textContent=""
+
     Qualification.value=""
-    valGender.textContent=""
-    valQualification.textContent=''
     Address.value=""
-    valAddress.textContent=""
-    CountrySelector.value=""
-    valCountry.textContent=""
     State.value=""
-    valState.textContent=""
     City.value=""
-    valCity.textContent=""
     RadioBtn.checked=false
     RadioBtn2.checked=false
 
@@ -438,7 +388,9 @@ function refresh(){
 
     formSelect.forEach(element=> { element.classList.remove('input-border')})
 
-}
+    formSpan.forEach(element => { element.textContent = ""})
+
+} 
 
 function deletePopup(deleteId) {
     alertPopupId.style.display = "flex";
@@ -452,154 +404,77 @@ function deletePopup(deleteId) {
             // .then((res) => res.json())
             .then((res) => {
                 if(res.ok) {
-                    allEmployee.splice(findIndexById(allEmployee, deleteId), 1)
+                    Employees.splice(findIndexById(Employees, deleteId), 1)
                     empDelete();
                     formHide();
-                    paginationFun(0, allEmployee)
+                    fetchData(currentPage)
+                    // paginationFun(0, allEmployee)
                 }
-            })
-           
-            // setTimeout(() => {
-                // window.location.reload();
-            // }, 2000);           
+            }) 
+                    
        
     })
  }
 
  let searchedArray = [];
 
- const searchEmp = () =>{
-    // var searchEmployee , filter ;
-    var filteer = searchEmployee.value.toLowerCase();
-    
-     start = 0;
-     if(filteer!==""){
-        searchedArray = []
-     for(let i=0;i<allEmployee.length;i++){
-        
-        let firstname = allEmployee[i].firstName.toLowerCase();
-        let email = allEmployee[i].email.toLowerCase();
-        let lastname = allEmployee[i].lastName.toLowerCase();
-        let phone = allEmployee[i].phone.toString();
-
-        if(firstname.indexOf(filteer) > -1 || email.indexOf(filteer) > -1 || lastname.indexOf(filteer) > -1 || phone.indexOf(filteer) > -1 ){
-              searchedArray.push(allEmployee[i]);
-        }       
-     }
-     console.log(searchedArray.length)
-     makebtn(employeeList.value, searchedArray)
+     
     
     //  displayData(searchedArray, start); 
-    }
-    else{
-        makebtn(employeeList.value , allEmployee)
-    }
-    
-  }
+let currentPage ;
 
-  function makebtn(aNum, allEmploy) {
-        totalLength.textContent = allEmploy.length;
-        console.log(allEmploy.length)
-        numOfPage = Math.ceil(allEmploy.length/aNum)
-        console.log(numOfPage);
+
+  function makebtn(numOfPage) {
+     
+        totalLength.textContent = totalEmploye;
         var paginationID = document.getElementById("paginationId");
-        let pagenum = "";
+        let pagenum = [];
         var i
         for( i = 0 ; i<numOfPage ; i++){
           pagenum += ` <button class="sml-btn pageBtn" id="pageBtns" onclick = numClick(${i})> ${i+1} </button>`
         }
         paginationID.innerHTML = pagenum;
         i =0;
-        paginationFun(i, allEmploy)
-        // for (var i = 0; i < pagenum.length; i++) {
-        //     pagenum[i].addEventListener('click', function() {
-        //         this.style.backgroundColor = 'blue';
-        //     });
-        // }
   }
-//   let Numbe
+
 
 function numClick(pnum){
-        if (searchEmployee.value !=="" ){
-            paginationFun(pnum, searchedArray)  
-       }
-       else{
-           paginationFun(pnum, allEmployee)  
-       }
+    currentPage = pnum;
+    fetchData(currentPage)
+
 }
 
-function paginationFun(numb, allEmploye) {  
-        console.log(numb);
-        Numbe = numb
-        let numOfDatas = [];
-        var k = parseInt(employeeList.value);
-        const l = allEmploye.length;
+function paginationFun(currentPage) {  
+
         var pageBtnss = document.querySelectorAll('.pageBtn');
         pageBtnss.forEach(btn => {
         btn.classList?.remove('btnColor');
         });
        
+        pageBtnss[currentPage]?.classList.add("btnColor")
 
-
-    // Add color to the clicked button
-    // butto.classList.add("btnColor");
-        
-        for (var A = numb*k ; A < (numb*k)+k && A < l; A++){
-            numOfDatas.push(allEmploye[A])       
-        }   
-    displayData(numOfDatas, numb*k);
-    console.log(numb)
-     pageBtnss[numb].classList.add("btnColor")
+    
 }
-
 
 function firstPage(){
-    const N = 0;
-    if (searchEmployee.value !=="" ){
-        paginationFun(N, searchedArray)  
-   }
-   else{
-       paginationFun(N, allEmployee)  
-   }
-}
+    currentPage = 0;
+    fetchData(currentPage);
 
+}
 
 function lastPage(){
-    if (searchEmployee.value !=="" ){
-        paginationFun(numOfPage-1, searchedArray)  
-   }
-   else{
-       paginationFun(numOfPage-1, allEmployee)  
-
-   }
-    // paginationFun(numOfPage-1, endvalue)
+    currentPage = numOfPage-1
+    fetchData(currentPage)
 }
-
-
 function nextPage(){
-       Numbe < numOfPage-1 ? Numbe+=1 : Numbe
-   console.log("num" + Numbe)
-    if (searchEmployee.value !=="" ){
-        paginationFun(Numbe, searchedArray)  
-   }
-   else{
-       paginationFun(Numbe, allEmployee)  
-   }
-    // paginationFun(Numbe, endvalue)
+       currentPage < numOfPage-1 ? currentPage+=1 : currentPage
+       fetchData(currentPage)
 }
 
 function previousePage(){
-    Numbe > 0 ? Numbe-=1 : Numbe
-    if (searchEmployee.value !=="" ){
-        paginationFun(Numbe, searchedArray)  
-   }
-   else{
-       paginationFun(Numbe, allEmployee)  
-   }
-    // paginationFun(Numbe, endvalue)
+    currentPage > 0 ? currentPage-=1 : currentPage
+    fetchData(currentPage)
 }
-
-
 editImage.onchange = function(){
      profileImg = editImage.files[0];     
      if(profileImg){
@@ -615,10 +490,7 @@ formFile.onchange = function(){
         inputImg.style.display = 'none'
         imgSrc.src = URL.createObjectURL(profileImg)
     }
-    console.log(profileImg);   
 }
-
-
 
 function uploadImg(id){ 
     var userImg = new FormData();
@@ -627,72 +499,45 @@ function uploadImg(id){
      userImg.append("avatar" , profileImg)
 
      try {
-        const res = fetch('http://localhost:5010/employees/'
-         + id + '/avatar', {
+        const res = fetch('http://localhost:5010/api/employees/'+id+'/avatar', {
             method : 'POST',
             body : userImg
          })
-         console.log(res);
-     }
+     } 
      catch(error){
-        console.error(error);
+        console.error(error); 
      }
 }
 
+function validation(key){
+   let input = document.getElementById(key);
+   let inputError = document.getElementById(key+"Error");
 
+    let  keyvalue = firstUpperCase(key);
 
-
-
-
-
-function valSalutations(){
-      if(Salutation.value == ""){
-            valSalutation.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>Salutaion is mandatory`;
-            Salutation.classList.add('input-border')
-            return false;
-      }
-      valSalutation.innerHTML = ""
-      Salutation.classList.remove('input-border')
-      return true
-}
-
-function validFName(){
-    if(!FirstName.value){
-        valFName.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>First name is mandatory`;
-        FirstName.classList.add('input-border')
-        return false;
-    }
-    valFName.innerHTML = ""
-    FirstName.classList.remove('input-border')
+   if (input.value ==""){
+    inputError.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>${keyvalue} is required`;
+    input.classList.add('input-border')
+    return false;
+   }
+   else{
+    inputError.innerHTML = ""
+    input.classList.remove('input-border')
     return true
+   }
+
+} 
+function firstUpperCase(str){
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
-function validLName(){
-    if(!SecondName.value){
-        valLName.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>Last name is mandatory`;
-        SecondName.classList.add('input-border')
-        return false;
-    }
-    valLName.innerHTML = ""
-    SecondName.classList.remove('input-border')
-    return true
-}
-function validUName(){
-    if(!UserName.value){
-        valUName.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>User name is mandatory`;
-        UserName.classList.add('input-border')
-        return false;
-    }
-    valUName.innerHTML = ""
-    UserName.classList.remove('input-border')
-    return true
-}
+
 const specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
 const numberRegex = /\d+/;
 const alphabetRegex = /[a-zA-Z]+/;
 
 function validPassword(){
     if(!Password.value){
-        valPassword.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>Password name is mandatory`;
+        valPassword.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>Password is mandatory`;
         Password.classList.add('input-border')
         return false;
     }
@@ -766,59 +611,6 @@ function validGender(){
     return true
 }
 
-function validQualification(){
-    if(!Qualification.value){
-        valQualification.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>Enter qualification`;
-        Qualification.classList.add('input-border')
-        return false;
-    }
-    valQualification.innerHTML = ""
-    Qualification.classList.remove('input-border')
-    return true
-}
-
-function validAddress(){
-    if(!Address.value){
-        valAddress.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>Enter address`;
-        Address.classList.add('input-border')
-        return false;
-    }
-    valAddress.innerHTML = ""
-    Address.classList.remove('input-border')
-    return true
-}
-
-function validCountry(){
-    if(CountrySelector.value ==""){
-        valCountry.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>Enter Country`;
-        CountrySelector.classList.add('input-border')
-        return false;
-    }
-    valCountry.innerHTML = ""
-    CountrySelector.classList.remove('input-border')
-    return true
-}
-function validState(){
-    if(State.value ==""){
-        valState.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>Enter Country`;
-        State.classList.add('input-border')
-        return false;
-    }
-    valState.innerHTML = ""
-    State.classList.remove('input-border')
-    return true
-}
-function validCity(){
-    if(!City.value){
-        valCity.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>Enter address`;
-        City.classList.add('input-border')
-        return false;
-    }
-    valCity.innerHTML = ""
-    City.classList.remove('input-border')
-    return true
-}
-
 function empAdded(){
     succesIcon.innerHTML = `<i class="fa-solid fa-circle-check"></i>`;
     succesText.textContent = "Employee Added succesfully"
@@ -848,8 +640,5 @@ function empDelete(){
     succesAlert.classList.remove('show')},1800)
 }
 
-
-// var fname ="arjun";
-// var f = "j";
-
-// console.log(fname.indexOf(f));
+currentPage = 0;
+fetchData(currentPage);

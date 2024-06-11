@@ -6,8 +6,10 @@ const employSchema = mongoose.Schema({
     //     required : true,
     //     ref :"admin"
     // },
-    Image : {
-        type : String
+    avatar : {
+        type : String,
+        default :"default-avatar.png"
+
     },
     salutation :{
         type: String,

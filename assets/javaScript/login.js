@@ -30,23 +30,35 @@ if(validateForm()){
 		email : email.value,
 		password : password.value
 	}
-	console.log(signinDatas);
 	
 		// console.log(signinData());
 	
 	try{
-		fetch ("http://localhost:5010/api/admin/signup",{
+		fetch ("http://localhost:5010/admin/signup",{
 			method : "POST",
 			headers :{
 				"Content-type" : "application/json"
 			},
 			body:JSON.stringify(signinDatas)
 		})
-		.then(response => response.json())
-		.then(data => console.log(data)
+		.then(async response => {
+			
+			if (!response.ok){
+				const err = await response.json()
+				emailSpan.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>${err.message}`
+				throw new Error(err.message || 'Something went wrong')
+			}
+			return response.json()
 
-	)
-		.catch(error => console.log("error" ,error))
+		})
+		.then(data => { console.log(data)
+		if(data.redirect){
+			console.log("data.redirect");
+			window.location.href= `${data.redirect}`
+		}}
+	) 
+	    .catch(error => console.log("error" ,error)) 
+	
 		
 	}
 	catch(error){
@@ -71,16 +83,31 @@ signinBtn.addEventListener("click", ()=> {
 			password : logPassword.value
 		}
 		try{
-			fetch ("http://localhost:5010/api/admin/login",{
+			fetch ("http://localhost:5010/admin/login",{
 				method : "POST",
 				headers :{
 					"Content-type" : "application/json"
 				},
 				body:JSON.stringify(loginDatas)
 			})
-			.then(response => response.json())
-			.then(data => console.log(data)
-	
+			.then(async response => {
+				
+				if(!response.ok){
+					
+					const err = await response.json()
+					if (err.message1) {
+						loginEmailSpan.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>${err.message1}`
+						throw new Error(`${err.message1}`)
+					}
+                    logPasswordSpan.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>${err.message}`
+					throw new Error(`${err.message}`)
+				}
+				return response.json()
+			} )
+			.then(data => {console.log(data)
+				
+			window.location.href = data.redirect
+			}
 		)
 			.catch(error => console.log("error" ,error))
 			
@@ -91,6 +118,30 @@ signinBtn.addEventListener("click", ()=> {
 
 	}
 
+})
+
+document.getElementById("logoutBtn").addEventListener("click" ,async  () => {
+    try {
+        const response = await fetch('/api/employees/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include' // Include cookies in the request
+        });
+
+        if (response.ok) {
+            // Redirect to the login page or another page
+            window.location.href = '/api/admin/login';
+        } else {
+            const errorData = await response.json();
+            console.error('Logout failed:', errorData);
+            alert('Logout failed. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again.');
+    }
 })
 
 function validationSignin(){
